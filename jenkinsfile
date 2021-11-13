@@ -1,0 +1,44 @@
+pipeline
+{
+
+agent any
+ stages {
+ 
+   stage('PULL') {
+
+   steps {
+   
+   script {
+
+checkout([$class: 'GitSCM', branches: [[name: '*/master']],
+
+userRemoteConfigs: [[
+
+credentialsId: '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',
+url: 'https://github.com/marwenriahi/Myapp.git' ]]])
+
+}
+       
+   }
+
+}
+ stage('npm-Install') {
+             steps{
+                script{
+                    sh "npm install"
+                }
+            }
+        }
+stage('build') {
+steps{
+
+script {
+
+sh "ansible-playbook Ansible/build.yml -i Ansible/inventory/host.yml "
+
+}
+}
+}
+ 
+}
+}
